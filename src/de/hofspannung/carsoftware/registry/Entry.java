@@ -34,14 +34,17 @@ public class Entry<T> {
      */
     public Entry(Registry<T> registry, int index, String name, String unit) throws DuplicateException {
         super();
-        assert registry != null;
+
+        assert registry != null : "Registry must not be 'null'.";
+        assert index >= 0 : "Index must not be negative.";
+
         this.registry = registry;
         this.index = index;
         this.value = registry.getDefaultValue();
         this.name = name;
         this.unit = unit;
         if (!this.registry.addEntry(this)) {
-            throw new DuplicateException("Such an entry already exists!");
+            throw new DuplicateException("This entry already exists in the registry!");
         }
     }
 

@@ -1,8 +1,14 @@
 package de.hofspannung.carsoftware.registry;
 
+import de.hofspannung.carsoftware.exception.DuplicateException;
+
 import java.util.ArrayList;
 
+
 public class Registry<T> {
+
+    private RegistryType type = RegistryType.NONE;
+
     private String name;
     private String typeName;
 
@@ -15,8 +21,8 @@ public class Registry<T> {
      *
      * @param defaultValue Default value for entries. Cannot be null.
      */
-    public Registry(T defaultValue) {
-        this(null, defaultValue);
+    public Registry(RegistryType type, T defaultValue) {
+        this(type, null, defaultValue);
     }
 
     /**
@@ -25,8 +31,12 @@ public class Registry<T> {
      * @param name         Name of this registry.
      * @param defaultValue Default value for entries. Cannot be null.
      */
-    public Registry(String name, T defaultValue) {
-        assert defaultValue != null;
+    public Registry(RegistryType type, String name, T defaultValue) {
+        assert type != RegistryType.NONE : "Type of Registry must not be 'NONE'.";
+        assert defaultValue != null : "Default value of registry must not be 'null'.";
+        assert RegistryType.isObjectOfType(type, defaultValue) : "Type of registry and template type do not match.";
+
+        this.type = type;
         this.name = name;
         this.typeName = defaultValue.getClass().getSimpleName();
         this.defaultValue = defaultValue;
@@ -45,6 +55,14 @@ public class Registry<T> {
 
         entries.add(entry);
         return true;
+    }
+
+    public void addNewEntry(int index) throws DuplicateException {
+        new Entry<T>(this, index);
+    }
+
+    public void addNewEntry(int index, String name, String unit) throws DuplicateException {
+        new Entry<T>(this, index, name, unit);
     }
 
     public boolean containsEntry(Entry<T> entry) {

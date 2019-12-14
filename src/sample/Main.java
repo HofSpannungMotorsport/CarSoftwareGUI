@@ -1,6 +1,5 @@
 package sample;
 
-import de.hofspannung.carsoftware.data.ByteArray;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,8 +11,6 @@ public class Main extends Application {
     public static void main(String[] args) {
         // Enable Asserts
         ClassLoader.getSystemClassLoader().setDefaultAssertionStatus(true);
-
-        ByteArray a = new ByteArray();
 
 
         launch(args);

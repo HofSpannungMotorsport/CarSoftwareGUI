@@ -1,6 +1,6 @@
 package de.hofspannung.carsoftware.message.registry;
 
-import de.hofspannung.carsoftware.data.ByteArray;
+import de.hofspannung.carsoftware.data.ByteArrayList;
 import de.hofspannung.carsoftware.message.Message;
 import de.hofspannung.carsoftware.message.MessageType;
 import de.hofspannung.carsoftware.message.ParseException;
@@ -11,7 +11,7 @@ public class RegistryMessage extends Message {
     /*
     4       4  		8			16					32
     0000    0000	00000000	00000000 00000000	00000000 00000000 00000000 00000000
-    Action  Flags	Registry	Entry				Value (optional)
+    Action  Flags	Registry	Entry				Value
 
     Flags:
     1 has registry
@@ -20,7 +20,7 @@ public class RegistryMessage extends Message {
     4
     */
 
-    protected static MessageType type = MessageType.REGISTRY;
+    public static MessageType type = MessageType.REGISTRY;
 
     protected RegistryAction action;
     protected byte registry;
@@ -35,40 +35,122 @@ public class RegistryMessage extends Message {
         // TODO Konstruktor
     }
 
-    public static RegistryMessage fromBytes(byte[] arr) throws ParseException {
-        if (!firstByteCorrect(arr[0], getType()))
-            throw new ParseException("Wrong message type!");
-        return null;
+    public RegistryMessage(byte[] bytes) throws ParseException {
+        super(bytes);
+    }
+
+    /**
+     * Tries to parse raw bytes into this instance.
+     *
+     * @param bytes Byte representation.
+     * @throws ParseException If unable to parse {@code bytes}.
+     * @see RegistryMessage#fromBytes(ByteArrayList)
+     */
+    @Override
+    public void fromBytes(ByteArrayList bytes) throws ParseException {
+        super.fromBytes(bytes);
+
+        int position = 1;
+
+        byte head = 0;
+        try {
+            head = bytes.get(position++);
+        } catch (IndexOutOfBoundsException e) {
+            throw new ParseException("Invalid Message", bytes.getArray());
+        }
+
+        // action
+        RegistryAction[] actions = RegistryAction.values();
+        int actionNum = head >>> 4;
+        if (actionNum >= actions.length)
+            throw new ParseException("Invalid action", bytes);
+        RegistryAction action = actions[actionNum];
+
+        // flags
+        boolean hasRegistry = (head & 0x8) > 0;
+        boolean hasEntry = (head & 0x4) > 0;
+        boolean hasValue = (head & 0x2) > 0;
+
+        // registry
+        byte registry = 0;
+        if (hasRegistry) {
+            try {
+                registry = bytes.get(position++);
+            } catch (IndexOutOfBoundsException e) {
+                throw new ParseException("Message too short", bytes);
+            }
+        }
+
+        // entry
+        short entry = 0;
+        if (hasEntry) {
+            try {
+                entry = bytes.getShort(position);
+                position += 2;
+            } catch (IndexOutOfBoundsException e) {
+                throw new ParseException("Message too short", bytes);
+            }
+        }
+
+        // value
+        int value = 0;
+        if (hasValue) {
+            try {
+                value = bytes.getInt(position);
+                position += 4;
+            } catch (IndexOutOfBoundsException e) {
+                throw new ParseException("Message too short", bytes);
+            }
+        }
+
+        // alter values
+        this.action = action;
+        this.hasRegistry = hasRegistry;
+        this.registry = registry;
+        this.hasEntry = hasEntry;
+        this.entry = entry;
+        this.hasValue = hasValue;
+        this.value = value;
     }
 
     @Override
-    public byte[] toBytes() {
-        ByteArray array = new ByteArray();
-
-        int size = 2;
-        if (hasRegistry) size += 1;
-        if (hasEntry) size += 2;
-        if (hasValue) size += 4;
-
+    public ByteArrayList toBytes() {
+        ByteArrayList array = super.toBytes();
         array.add(firstByte());
-
-        int head = (action.ordinal() << 4) & 0xF0;
+        // Action
+        array.addByte(action.ordinal() << 4);
 
         if (hasRegistry) {
-            head |= 0x8;
+            array.setBit(1, 4);
             array.add(registry);
         }
         if (hasEntry) {
-            head |= 0x4;
+            array.setBit(1, 5);
             array.addShort(entry);
         }
         if (hasValue) {
-            head |= 0x2;
+            array.setBit(1, 6);
             array.addInt(value);
         }
 
-        array.addByte(1, head);
-
-        return array.getArray();
+        return array;
     }
+
+
+    public RegistryAction getAction() {
+        return action;
+    }
+
+    public byte getRawRegistry() {
+        return registry;
+    }
+
+    public short getRawEntry() {
+        return entry;
+    }
+
+    public int getRawValue() {
+        return value;
+    }
+
 }

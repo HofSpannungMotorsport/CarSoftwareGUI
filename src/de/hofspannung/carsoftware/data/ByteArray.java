@@ -14,8 +14,8 @@ public class ByteArray extends ArrayList<Byte> {
 
     public ByteArray(byte[] array) {
         super(array.length);
-        for (int i = 0; i < array.length; i++)
-            set(i, array[i]);
+        for (byte b : array)
+            add(b);
     }
 
     /**
@@ -106,6 +106,12 @@ public class ByteArray extends ArrayList<Byte> {
         bitIndex %= 8;
         byte b = get(byteIndex);
         set(byteIndex, (byte) (b | 2 ^ bitIndex));
+    }
+
+    public void clearBit(int index) {
+        int byt = index / 8;
+        int bit = index % 8;
+        clearBit(byt, bit);
     }
 
     public void clearBit(int byteIndex, int bitIndex) throws IndexOutOfBoundsException {

@@ -9,7 +9,7 @@ public class IndexOutOfBoundsException extends java.lang.IndexOutOfBoundsExcepti
 
     protected long upperBound;
     protected long lowerBound;
-    protected long value;
+    protected long index;
     protected boolean valueGiven;
     protected boolean boundsGiven;
 
@@ -21,30 +21,30 @@ public class IndexOutOfBoundsException extends java.lang.IndexOutOfBoundsExcepti
         super(message);
     }
 
-    public IndexOutOfBoundsException(String message, long value) {
+    public IndexOutOfBoundsException(String message, long index) {
         super(message);
-        this.value = value;
+        this.index = index;
         valueGiven = true;
     }
 
-    public IndexOutOfBoundsException(String message, long value, long lowerBound, long upperBound) {
+    public IndexOutOfBoundsException(String message, long index, long lowerBound, long upperBound) {
         super(message);
-        this.value = value;
+        this.index = index;
         this.lowerBound = lowerBound;
         this.upperBound = upperBound;
         valueGiven = true;
         boundsGiven = true;
     }
 
-    public IndexOutOfBoundsException(long value) {
+    public IndexOutOfBoundsException(long index) {
         super();
-        this.value = value;
+        this.index = index;
         valueGiven = true;
     }
 
-    public IndexOutOfBoundsException(long value, long lowerBound, long upperBound) {
+    public IndexOutOfBoundsException(long index, long lowerBound, long upperBound) {
         super();
-        this.value = value;
+        this.index = index;
         this.lowerBound = lowerBound;
         this.upperBound = upperBound;
         valueGiven = true;
@@ -59,8 +59,8 @@ public class IndexOutOfBoundsException extends java.lang.IndexOutOfBoundsExcepti
         return lowerBound;
     }
 
-    public long getValue() {
-        return value;
+    public long getIndex() {
+        return index;
     }
 
     public boolean isValueGiven() {
@@ -77,7 +77,7 @@ public class IndexOutOfBoundsException extends java.lang.IndexOutOfBoundsExcepti
         if (valueGiven || boundsGiven)
             s += "\n";
         if (valueGiven)
-            s += "Value: " + value + "    ";
+            s += "Value: " + index + "    ";
         if (boundsGiven)
             s += "Bounds: " + lowerBound + " to " + upperBound;
         return s;

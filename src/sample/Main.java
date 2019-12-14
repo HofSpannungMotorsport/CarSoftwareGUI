@@ -1,7 +1,6 @@
 package sample;
 
-import de.hofspannung.carsoftware.registry.Registry;
-import de.hofspannung.carsoftware.registry.RegistryType;
+import de.hofspannung.carsoftware.data.ByteArray;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,9 +13,8 @@ public class Main extends Application {
         // Enable Asserts
         ClassLoader.getSystemClassLoader().setDefaultAssertionStatus(true);
 
+        ByteArray a = new ByteArray();
 
-        Registry<Integer> test = new Registry<>(RegistryType.INT32, 4);
-        System.out.println(RegistryType.FLOAT.ordinal());
 
         launch(args);
     }

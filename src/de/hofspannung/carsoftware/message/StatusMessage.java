@@ -7,8 +7,9 @@ public class StatusMessage extends Message {
         type = MessageType.STATUS;
     }
 
+
     @Override
-    public byte[] toByteArray() {
+    public byte[] toBytes() {
         return new byte[0];
     }
 }

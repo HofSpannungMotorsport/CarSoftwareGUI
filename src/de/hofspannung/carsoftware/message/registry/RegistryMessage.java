@@ -1,66 +1,74 @@
 package de.hofspannung.carsoftware.message.registry;
 
+import de.hofspannung.carsoftware.data.ByteArray;
 import de.hofspannung.carsoftware.message.Message;
+import de.hofspannung.carsoftware.message.MessageType;
+import de.hofspannung.carsoftware.message.ParseException;
 import de.hofspannung.carsoftware.registry.Entry;
 
 public class RegistryMessage extends Message {
 
-/*
-4       4  		8			16					32
-0000    0000	00000000	00000000 00000000	00000000 00000000 00000000 00000000
-Action  Flags	Registry	Entry				Value (optional)
+    /*
+    4       4  		8			16					32
+    0000    0000	00000000	00000000 00000000	00000000 00000000 00000000 00000000
+    Action  Flags	Registry	Entry				Value (optional)
 
-Flags:
-1 has registry
-2 has entry
-3 has value
-4
-*/
+    Flags:
+    1 has registry
+    2 has entry
+    3 has value
+    4
+    */
 
-    private RegistryAction action;
-    private byte registry;
-    private boolean hasRegistry;
-    private short entry;
-    private boolean hasEntry;
-    private int value;
-    private boolean hasValue;
+    protected static MessageType type = MessageType.REGISTRY;
+
+    protected RegistryAction action;
+    protected byte registry;
+    protected boolean hasRegistry;
+    protected short entry;
+    protected boolean hasEntry;
+    protected int value;
+    protected boolean hasValue;
 
     public RegistryMessage(Entry<?> entry, RegistryAction action) {
         super();
         // TODO Konstruktor
     }
 
+    public static RegistryMessage fromBytes(byte[] arr) throws ParseException {
+        if (!firstByteCorrect(arr[0], getType()))
+            throw new ParseException("Wrong message type!");
+        return null;
+    }
+
     @Override
-    public byte[] toByteArray() {
-        int size = 1;
+    public byte[] toBytes() {
+        ByteArray array = new ByteArray();
+
+        int size = 2;
         if (hasRegistry) size += 1;
         if (hasEntry) size += 2;
         if (hasValue) size += 4;
 
-        int pointer = 1;
-        byte[] ret = new byte[size];
+        array.add(firstByte());
 
         int head = (action.ordinal() << 4) & 0xF0;
 
         if (hasRegistry) {
             head |= 0x8;
-            ret[pointer++] = registry;
+            array.add(registry);
         }
         if (hasEntry) {
             head |= 0x4;
-            ret[pointer++] = (byte) (entry << 8);
-            ret[pointer++] = (byte) entry;
+            array.addShort(entry);
         }
         if (hasValue) {
             head |= 0x2;
-            ret[pointer++] = (byte) (value << 24);
-            ret[pointer++] = (byte) (value << 16);
-            ret[pointer++] = (byte) (value << 8);
-            ret[pointer++] = (byte) value;
+            array.addInt(value);
         }
 
-        ret[0] = (byte) head;
+        array.addByte(1, head);
 
-        return ret;
+        return array.getArray();
     }
 }

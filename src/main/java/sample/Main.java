@@ -13,7 +13,7 @@ public class Main extends Application {
         ClassLoader.getSystemClassLoader().setDefaultAssertionStatus(true);
 
 
-        launch(args);
+       // launch(args);
     }
 
     @Override

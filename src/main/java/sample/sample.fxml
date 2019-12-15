@@ -17,5 +17,9 @@
       <Button mnemonicParsing="false" text="Button" />
       <Button mnemonicParsing="false" text="Button" />
       <Button mnemonicParsing="false" text="Button" />
+      <StackPane prefHeight="150.0" prefWidth="200.0" />
+      <Button mnemonicParsing="false" text="Button" GridPane.rowIndex="1" />
+      <Button mnemonicParsing="false" text="Button" GridPane.rowIndex="2" />
+      <Button mnemonicParsing="false" text="Button" GridPane.rowIndex="3" />
    </children>
 </GridPane>

@@ -1,8 +1,9 @@
 package de.hofspannung.carsoftware.registry;
 
+import de.hofspannung.carsoftware.data.IntegerSerializable;
 import de.hofspannung.carsoftware.exception.DuplicateException;
 
-public class Entry<T> {
+public class Entry<T extends IntegerSerializable> {
 
     private Registry<T> registry;
 

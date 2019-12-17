@@ -1,9 +1,9 @@
 package de.hofspannung.carsoftware.message.registry;
 
 import de.hofspannung.carsoftware.data.ByteArrayList;
+import de.hofspannung.carsoftware.exception.ParseException;
 import de.hofspannung.carsoftware.message.Message;
 import de.hofspannung.carsoftware.message.MessageType;
-import de.hofspannung.carsoftware.exception.ParseException;
 import de.hofspannung.carsoftware.registry.Entry;
 
 public class RegistryMessage extends Message {
@@ -32,7 +32,13 @@ public class RegistryMessage extends Message {
 
     public RegistryMessage(Entry<?> entry, RegistryAction action) {
         super();
-        // TODO Konstruktor
+        this.action = action;
+        this.registry = (byte) entry.getRegistry().getType().ordinal();
+        this.entry = (short) entry.getIndex();
+        this.value = entry.getValue().serializedAsInt();
+        this.hasRegistry = true;
+        this.hasEntry = true;
+        this.hasValue = action != RegistryAction.GET;
     }
 
     public RegistryMessage(byte[] bytes) throws ParseException {

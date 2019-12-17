@@ -1,11 +1,12 @@
 package de.hofspannung.carsoftware.registry;
 
+import de.hofspannung.carsoftware.data.IntegerSerializable;
 import de.hofspannung.carsoftware.exception.DuplicateException;
 
 import java.util.ArrayList;
 
 
-public class Registry<T> {
+public class Registry<T extends IntegerSerializable> {
 
     private RegistryType type = RegistryType.NONE;
 
@@ -67,6 +68,15 @@ public class Registry<T> {
 
     public boolean containsEntry(Entry<T> entry) {
         return entries.contains(entry);
+    }
+
+    /**
+     * Type of the registry.
+     *
+     * @return type
+     */
+    public RegistryType getType() {
+        return type;
     }
 
     /**

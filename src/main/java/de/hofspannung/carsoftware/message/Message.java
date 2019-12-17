@@ -60,7 +60,7 @@ public abstract class Message implements ByteSerializable {
             throw new ParseException("Invalid caller");
         }
 
-        if (callerType != values[type])
+        if (callerType.equals(values[type]))
             throw new ParseException("Wrong message type!");
     }
 

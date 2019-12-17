@@ -31,14 +31,21 @@ public class RegistryMessage extends Message {
     protected boolean hasValue;
 
     public RegistryMessage(Entry<?> entry, RegistryAction action) {
+        this(action, (byte) entry.getRegistry().getType().ordinal(), true,
+                (short) entry.getIndex(), true,
+                entry.getValue().serializedAsInt(), action != RegistryAction.GET);
+    }
+
+    protected RegistryMessage(RegistryAction action, byte registry, boolean hasRegistry,
+                              short entry, boolean hasEntry, int value, boolean hasValue) {
         super();
         this.action = action;
-        this.registry = (byte) entry.getRegistry().getType().ordinal();
-        this.entry = (short) entry.getIndex();
-        this.value = entry.getValue().serializedAsInt();
-        this.hasRegistry = true;
-        this.hasEntry = true;
-        this.hasValue = action != RegistryAction.GET;
+        this.registry = registry;
+        this.hasRegistry = hasRegistry;
+        this.entry = entry;
+        this.hasEntry = hasEntry;
+        this.value = value;
+        this.hasValue = hasValue;
     }
 
     public RegistryMessage(byte[] bytes) throws ParseException {
@@ -67,15 +74,15 @@ public class RegistryMessage extends Message {
 
         // action
         RegistryAction[] actions = RegistryAction.values();
-        int actionNum = head >>> 4;
+        int actionNum = (head & 0xF0) >>> 4;
         if (actionNum >= actions.length)
             throw new ParseException("Invalid action", bytes);
         RegistryAction action = actions[actionNum];
 
         // flags
-        boolean hasRegistry = (head & 0x8) > 0;
-        boolean hasEntry = (head & 0x4) > 0;
-        boolean hasValue = (head & 0x2) > 0;
+        boolean hasRegistry = bytes.getBit(1, 3);
+        boolean hasEntry = bytes.getBit(1, 2);
+        boolean hasValue = bytes.getBit(1, 1);
 
         // registry
         byte registry = 0;
@@ -122,20 +129,20 @@ public class RegistryMessage extends Message {
     @Override
     public ByteArrayList toBytes() {
         ByteArrayList array = super.toBytes();
-        array.add(firstByte());
+
         // Action
-        array.addByte(action.ordinal() << 4);
+        array.addByte((action.ordinal() & 0xF) << 4);
 
         if (hasRegistry) {
-            array.setBit(1, 4);
+            array.setBit(1, 3);
             array.add(registry);
         }
         if (hasEntry) {
-            array.setBit(1, 5);
+            array.setBit(1, 2);
             array.addShort(entry);
         }
         if (hasValue) {
-            array.setBit(1, 6);
+            array.setBit(1, 1);
             array.addInt(value);
         }
 

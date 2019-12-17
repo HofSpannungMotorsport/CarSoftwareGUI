@@ -20,7 +20,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="CarSoftwareGUI" target="1.5" />
+      <module name="CarSoftwareGUI" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

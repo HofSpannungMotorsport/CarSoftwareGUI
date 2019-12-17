@@ -1,4 +1,4 @@
-package de.hofspannung.carsoftware.data;
+package de.hofspannung.carsoftware.exception;
 
 /**
  * {@link java.lang.IndexOutOfBoundsException} with value and bounds information.

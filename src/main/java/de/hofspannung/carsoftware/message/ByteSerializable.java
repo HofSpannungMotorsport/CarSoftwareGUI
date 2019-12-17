@@ -1,6 +1,7 @@
 package de.hofspannung.carsoftware.message;
 
 import de.hofspannung.carsoftware.data.ByteArrayList;
+import de.hofspannung.carsoftware.exception.ParseException;
 
 /**
  * Makes an object serializable into raw bytes.

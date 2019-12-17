@@ -1,5 +1,7 @@
 package de.hofspannung.carsoftware.data;
 
+import de.hofspannung.carsoftware.exception.IndexOutOfBoundsException;
+
 import java.util.ArrayList;
 
 /**

@@ -3,7 +3,7 @@ package de.hofspannung.carsoftware.message.registry;
 import de.hofspannung.carsoftware.data.ByteArrayList;
 import de.hofspannung.carsoftware.message.Message;
 import de.hofspannung.carsoftware.message.MessageType;
-import de.hofspannung.carsoftware.message.ParseException;
+import de.hofspannung.carsoftware.exception.ParseException;
 import de.hofspannung.carsoftware.registry.Entry;
 
 public class RegistryMessage extends Message {

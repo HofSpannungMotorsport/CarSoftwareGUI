@@ -1,4 +1,4 @@
-package de.hofspannung.carsoftware.message;
+package de.hofspannung.carsoftware.exception;
 
 import de.hofspannung.carsoftware.data.ByteArrayList;
 

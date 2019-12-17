@@ -53,15 +53,15 @@ public class ByteArrayList extends ArrayList<Byte> {
      *
      * @param startIndex first byte of the integer value
      * @return integer converted from bytes
-     * @throws IndexOutOfBoundsException if {@code startIndex < 0} or  {@code startIndex >= (size() - 4) }
+     * @throws IndexOutOfBoundsException if {@code startIndex < 0} or  {@code startIndex > (size() - 4) }
      */
     public int getInt(int startIndex) throws IndexOutOfBoundsException {
-        if (startIndex < 0 || startIndex >= (size() - 4))
+        if (startIndex < 0 || startIndex > (size() - 4))
             throw new IndexOutOfBoundsException(startIndex, 0, size() - 4);
         int ret = get(startIndex) << 24;
-        ret |= get(++startIndex) << 16;
-        ret |= get(++startIndex) << 8;
-        ret |= get(++startIndex);
+        ret |= (get(++startIndex) << 16) & 0xFF0000;
+        ret |= (get(++startIndex) << 8) & 0xFF00;
+        ret |= get(++startIndex) & 0xFF;
         return ret;
     }
 
@@ -81,13 +81,13 @@ public class ByteArrayList extends ArrayList<Byte> {
      *
      * @param startIndex first byte of the short value
      * @return short converted from bytes
-     * @throws IndexOutOfBoundsException if {@code startIndex < 0} or  {@code startIndex >= (size() - 2) }
+     * @throws IndexOutOfBoundsException if {@code startIndex < 0} or  {@code startIndex > (size() - 2) }
      */
     public short getShort(int startIndex) throws IndexOutOfBoundsException {
-        if (startIndex < 0 || startIndex >= (size() - 2))
+        if (startIndex < 0 || startIndex > (size() - 2))
             throw new IndexOutOfBoundsException(startIndex, 0, size() - 2);
         int ret = get(startIndex) << 8;
-        ret |= get(++startIndex);
+        ret |= get(++startIndex) & 0xFF;
         return (short) ret;
     }
 
@@ -185,7 +185,7 @@ public class ByteArrayList extends ArrayList<Byte> {
         if (bitIndex < 0 || bitIndex > 7)
             throw new IndexOutOfBoundsException(bitIndex, 0, 7);
 
-        set(byteIndex, (byte) (get(byteIndex) | 2 ^ bitIndex));
+        set(byteIndex, (byte) (get(byteIndex) | (0x1 << bitIndex)));
     }
 
     /**
@@ -195,6 +195,9 @@ public class ByteArrayList extends ArrayList<Byte> {
      * @throws IndexOutOfBoundsException if {@code index < 0} or {@code index >= (size() * 8}
      */
     public void clearBit(int index) {
+        if (index < 0 || index >= (size() * 8))
+            throw new IndexOutOfBoundsException(index, 0, size() * 8 - 1);
+
         int byt = index / 8;
         int bit = index % 8;
         clearBit(byt, bit);
@@ -209,10 +212,46 @@ public class ByteArrayList extends ArrayList<Byte> {
      *                                   or {@code bitIndex < 0 } or {@code bitIndex > 7}
      */
     public void clearBit(int byteIndex, int bitIndex) throws IndexOutOfBoundsException {
-        byteIndex += bitIndex / 8;
-        bitIndex %= 8;
-        byte b = get(byteIndex);
-        set(byteIndex, (byte) (b & ~(2 ^ bitIndex)));
+        if (byteIndex < 0 || byteIndex >= size())
+            throw new IndexOutOfBoundsException(byteIndex, 0, size() - 1);
+        if (bitIndex < 0 || bitIndex > 7)
+            throw new IndexOutOfBoundsException(bitIndex, 0, 7);
+
+        set(byteIndex, (byte) (get(byteIndex) & ~(0x1 << bitIndex)));
+    }
+
+    /**
+     * Gets the bit at the specified index.
+     *
+     * @param index index of the bit on the whole list
+     * @return the specified bit
+     * @throws IndexOutOfBoundsException if {@code index < 0} or {@code index >= (size() * 8}
+     */
+    public boolean getBit(int index) throws IndexOutOfBoundsException {
+        if (index < 0 || index >= (size() * 8))
+            throw new IndexOutOfBoundsException(index, 0, size() * 8 - 1);
+
+        int byt = index / 8;
+        int bit = index % 8;
+        return getBit(byt, bit);
+    }
+
+    /**
+     * Gets the bit at the specified index of the specified byte.
+     *
+     * @param byteIndex index of the byte
+     * @param bitIndex  index of the bit in the byte
+     * @return the specified bit
+     * @throws IndexOutOfBoundsException if {@code byteIndex < 0} or {@code byteIndex >= size()}
+     *                                   or {@code bitIndex < 0 } or {@code bitIndex > 7}
+     */
+    public boolean getBit(int byteIndex, int bitIndex) throws IndexOutOfBoundsException {
+        if (byteIndex < 0 || byteIndex >= size())
+            throw new IndexOutOfBoundsException(byteIndex, 0, size() - 1);
+        if (bitIndex < 0 || bitIndex > 7)
+            throw new IndexOutOfBoundsException(bitIndex, 0, 7);
+
+        return (get(byteIndex) & (0x1 << bitIndex)) > 0;
     }
 
 }

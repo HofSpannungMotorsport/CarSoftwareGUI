@@ -10,7 +10,7 @@ public class IndexOutOfBoundsException extends java.lang.IndexOutOfBoundsExcepti
     protected long upperBound;
     protected long lowerBound;
     protected long index;
-    protected boolean valueGiven;
+    protected boolean indexGiven;
     protected boolean boundsGiven;
 
     public IndexOutOfBoundsException() {
@@ -24,7 +24,7 @@ public class IndexOutOfBoundsException extends java.lang.IndexOutOfBoundsExcepti
     public IndexOutOfBoundsException(String message, long index) {
         super(message);
         this.index = index;
-        valueGiven = true;
+        indexGiven = true;
     }
 
     public IndexOutOfBoundsException(String message, long index, long lowerBound, long upperBound) {
@@ -32,14 +32,14 @@ public class IndexOutOfBoundsException extends java.lang.IndexOutOfBoundsExcepti
         this.index = index;
         this.lowerBound = lowerBound;
         this.upperBound = upperBound;
-        valueGiven = true;
+        indexGiven = true;
         boundsGiven = true;
     }
 
     public IndexOutOfBoundsException(long index) {
         super();
         this.index = index;
-        valueGiven = true;
+        indexGiven = true;
     }
 
     public IndexOutOfBoundsException(long index, long lowerBound, long upperBound) {
@@ -47,7 +47,7 @@ public class IndexOutOfBoundsException extends java.lang.IndexOutOfBoundsExcepti
         this.index = index;
         this.lowerBound = lowerBound;
         this.upperBound = upperBound;
-        valueGiven = true;
+        indexGiven = true;
         boundsGiven = true;
     }
 
@@ -63,21 +63,21 @@ public class IndexOutOfBoundsException extends java.lang.IndexOutOfBoundsExcepti
         return index;
     }
 
-    public boolean isValueGiven() {
-        return valueGiven;
+    public boolean indexGiven() {
+        return indexGiven;
     }
 
-    public boolean isBoundsGiven() {
+    public boolean boundsGiven() {
         return boundsGiven;
     }
 
     @Override
     public String toString() {
         String s = super.toString();
-        if (valueGiven || boundsGiven)
-            s += "\n";
-        if (valueGiven)
-            s += "Value: " + index + "    ";
+        if (indexGiven || boundsGiven)
+            s += "\nAdditional INFO:   ";
+        if (indexGiven)
+            s += "Value: " + index + "   ";
         if (boundsGiven)
             s += "Bounds: " + lowerBound + " to " + upperBound;
         return s;

@@ -115,31 +115,57 @@ public class ByteArrayList extends ArrayList<Byte> {
     }
 
     /**
+     * Binary representation of this list's content.
+     *
+     * @param withSpaces if a space should be added every 8 bits.
+     * @return binary representation
+     * @see ByteArrayList#toBinaryString()
+     */
+    public String toBinaryString(boolean withSpaces) {
+        StringBuilder ret = new StringBuilder();
+        for (byte b : this) {
+            if (withSpaces)
+                ret.append(" ");
+            ret.append(Integer.toBinaryString((b & 0xFF) + 0x100).substring(1));
+        }
+        return ret.toString();
+    }
+
+    /**
      * Binary representation of this list's content in groups of 8 bit (1 byte).
      *
      * @return binary representation
+     * @see ByteArrayList#toBinaryString(boolean)
      */
     public String toBinaryString() {
+        return toBinaryString(true);
+    }
+
+    /**
+     * Hexadecimal representation of this list's content.
+     *
+     * @param withSpaces if a space should be added every byte.
+     * @return hex representation
+     * @see ByteArrayList#toHexString()
+     */
+    public String toHexString(boolean withSpaces) {
         StringBuilder ret = new StringBuilder();
         for (byte b : this) {
-            ret.append(" ");
-            ret.append(Integer.toBinaryString((b & 0xFF) + 0x100).substring(1));
+            if (withSpaces)
+                ret.append(" ");
+            ret.append(Integer.toHexString((b & 0xFF) + 0x100).substring(1));
         }
-        return ret.substring(1);
+        return ret.toString().toUpperCase();
     }
 
     /**
      * Hexadecimal representation of this list's content in groups of 2 chars (1 byte).
      *
      * @return hex representation
+     * @see ByteArrayList#toHexString(boolean)
      */
     public String toHexString() {
-        StringBuilder ret = new StringBuilder();
-        for (byte b : this) {
-            ret.append(" ");
-            ret.append(Integer.toHexString((b & 0xFF) + 0x100).substring(1));
-        }
-        return ret.substring(1).toUpperCase();
+        return toHexString(true);
     }
 
     /**

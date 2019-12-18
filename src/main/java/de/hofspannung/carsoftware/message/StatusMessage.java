@@ -6,7 +6,7 @@ public class StatusMessage extends Message {
 
     public StatusMessage() {
         super();
-        type = MessageType.STATUS;
+        instanceType = MessageType.STATUS;
     }
 
 

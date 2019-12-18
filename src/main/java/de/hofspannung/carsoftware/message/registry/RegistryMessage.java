@@ -39,6 +39,7 @@ public class RegistryMessage extends Message {
     protected RegistryMessage(RegistryAction action, byte registry, boolean hasRegistry,
                               short entry, boolean hasEntry, int value, boolean hasValue) {
         super();
+        this.instanceType = MessageType.REGISTRY;
         this.action = action;
         this.registry = registry;
         this.hasRegistry = hasRegistry;
@@ -50,6 +51,7 @@ public class RegistryMessage extends Message {
 
     public RegistryMessage(byte[] bytes) throws ParseException {
         super(bytes);
+        this.instanceType = MessageType.REGISTRY;
     }
 
     /**

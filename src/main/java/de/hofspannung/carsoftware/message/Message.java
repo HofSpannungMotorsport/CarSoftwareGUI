@@ -7,6 +7,8 @@ public abstract class Message implements ByteSerializable {
 
     public static MessageType type = MessageType.NONE;
 
+    protected MessageType instanceType = type;
+
     public Message() {
     }
 
@@ -20,12 +22,12 @@ public abstract class Message implements ByteSerializable {
         return (first & 0xF) == type.ordinal();
     }
 
-    public static MessageType getType() {
-        return type;
+    public MessageType getInstanceType() {
+        return instanceType;
     }
 
     protected byte firstByte() {
-        return (byte) ((type.ordinal() & 0xF) | 0xA0);
+        return (byte) ((instanceType.ordinal() & 0xF) | 0xA0);
     }
 
     protected MessageType firstByte(byte first) throws ParseException {
@@ -60,7 +62,7 @@ public abstract class Message implements ByteSerializable {
             throw new ParseException("Invalid caller");
         }
 
-        if (callerType.equals(values[type]))
+        if (callerType.ordinal() != values[type].ordinal())
             throw new ParseException("Wrong message type!");
     }
 

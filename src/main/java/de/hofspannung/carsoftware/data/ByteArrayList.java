@@ -31,8 +31,7 @@ public class ByteArrayList extends ArrayList<Byte> {
      */
     public ByteArrayList(byte[] array) {
         super(array.length);
-        for (byte b : array)
-            add(b);
+        addAll(array);
     }
 
     /**
@@ -312,4 +311,8 @@ public class ByteArrayList extends ArrayList<Byte> {
         return (get(byteIndex) & (0x1 << bitIndex)) > 0;
     }
 
+    public void addAll(byte[] array) {
+        for (byte b : array)
+            add(b);
+    }
 }

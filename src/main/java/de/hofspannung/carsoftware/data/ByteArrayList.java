@@ -247,6 +247,38 @@ public class ByteArrayList extends ArrayList<Byte> {
     }
 
     /**
+     * Flips the bit at the specified index (sets it to 0).
+     *
+     * @param index index of the bit on the whole list
+     * @throws IndexOutOfBoundsException if {@code index < 0} or {@code index >= (size() * 8}
+     */
+    public void flipBit(int index) {
+        if (index < 0 || index >= (size() * 8))
+            throw new IndexOutOfBoundsException(index, 0, size() * 8 - 1);
+
+        int byt = index / 8;
+        int bit = index % 8;
+        flipBit(byt, bit);
+    }
+
+    /**
+     * Flips the bit at the specified index of the specified byte (sets it to 0).
+     *
+     * @param byteIndex index of the byte
+     * @param bitIndex  index of the bit in the byte
+     * @throws IndexOutOfBoundsException if {@code byteIndex < 0} or {@code byteIndex >= size()}
+     *                                   or {@code bitIndex < 0 } or {@code bitIndex > 7}
+     */
+    public void flipBit(int byteIndex, int bitIndex) throws IndexOutOfBoundsException {
+        if (byteIndex < 0 || byteIndex >= size())
+            throw new IndexOutOfBoundsException(byteIndex, 0, size() - 1);
+        if (bitIndex < 0 || bitIndex > 7)
+            throw new IndexOutOfBoundsException(bitIndex, 0, 7);
+
+        set(byteIndex, (byte) (get(byteIndex) ^ (0x1 << bitIndex)));
+    }
+
+    /**
      * Gets the bit at the specified index.
      *
      * @param index index of the bit on the whole list

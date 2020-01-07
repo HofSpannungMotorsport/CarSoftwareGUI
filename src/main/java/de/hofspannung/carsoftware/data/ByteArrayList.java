@@ -315,4 +315,26 @@ public class ByteArrayList extends ArrayList<Byte> {
         for (byte b : array)
             add(b);
     }
+
+    /**
+     * Gets a range from the list.
+     *
+     * @param index Index of the first byte in the range.
+     * @param size  Size (length) of the range.
+     * @return Specified range.
+     * @throws IndexOutOfBoundsException if {@code index < 0} or {@code index >= size()}
+     *                                   or {@code size < 1 } or {@code size > size - index}
+     */
+    public ByteArrayList getRange(int index, int size) throws IndexOutOfBoundsException {
+        if (index < 0 || index >= size())
+            throw new IndexOutOfBoundsException(index, 0, size() - 1);
+        if (size < 1 || size > size() - index)
+            throw new IndexOutOfBoundsException(size, 1, size() - index);
+
+        ByteArrayList range = new ByteArrayList();
+        for (int i = index; i < index + size; i++) {
+            range.add(get(i));
+        }
+        return range;
+    }
 }

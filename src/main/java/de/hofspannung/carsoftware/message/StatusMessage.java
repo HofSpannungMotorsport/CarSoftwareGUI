@@ -4,14 +4,14 @@ import de.hofspannung.carsoftware.data.ByteArrayList;
 
 public class StatusMessage extends Message {
 
-    public StatusMessage() {
-        super();
-        instanceType = MessageType.STATUS;
-    }
+  public StatusMessage() {
+    super();
+    instanceType = MessageType.STATUS;
+  }
 
 
-    @Override
-    public ByteArrayList toBytes() {
-        return null;
-    }
+  @Override
+  public ByteArrayList toBytes() {
+    return null;
+  }
 }

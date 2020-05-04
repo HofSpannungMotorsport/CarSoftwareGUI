@@ -10,9 +10,10 @@ public class Main extends Application {
 
   public static void main(String[] args) {
     // Enable Asserts
+    // Asserts should not be used in productions, I do know this. It will be fixed at some later point.
     ClassLoader.getSystemClassLoader().setDefaultAssertionStatus(true);
 
-    // launch(args);
+    launch(args);
   }
 
   @Override

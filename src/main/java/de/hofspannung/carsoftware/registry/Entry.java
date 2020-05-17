@@ -1,15 +1,23 @@
 package de.hofspannung.carsoftware.registry;
 
-import de.hofspannung.carsoftware.data.IntegerSerializable;
+import de.hofspannung.carsoftware.data.number.Number;
 import de.hofspannung.carsoftware.exception.DuplicateException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Range;
 
-public class Entry<T extends IntegerSerializable> {
+public class Entry<T extends Number> {
 
+  private static final int MAX_INDEX = Integer.MAX_VALUE;
+
+  @NotNull
   private Registry<T> registry;
 
+  @Range(from = 0, to = MAX_INDEX)
   private int index;
+  @NotNull
   private T value;
 
+  @NotNull
   private String name;
   private String unit;
 
@@ -20,8 +28,22 @@ public class Entry<T extends IntegerSerializable> {
    * @param index    Index of this entry.
    * @throws DuplicateException If this entry already exists in the registry.
    */
-  public Entry(Registry<T> registry, int index) throws DuplicateException {
-    this(registry, index, null, null);
+  public Entry(@NotNull Registry<T> registry, @Range(from = 0, to = MAX_INDEX) int index)
+      throws DuplicateException {
+    this(registry, index, String.format("%s-%03d", registry.getTypeName(), index));
+  }
+
+  /**
+   * Creates a new entry and adds it to the registry.
+   *
+   * @param registry Registry this belongs to.
+   * @param index    Index of this entry.
+   * @throws DuplicateException If this entry already exists in the registry.
+   */
+  public Entry(@NotNull Registry<T> registry, @Range(from = 0, to = MAX_INDEX) int index,
+      @NotNull String name)
+      throws DuplicateException {
+    this(registry, index, name, null);
   }
 
   /**
@@ -33,12 +55,10 @@ public class Entry<T extends IntegerSerializable> {
    * @param unit     Unit of measurement of this.
    * @throws DuplicateException If this entry already exists in the registry.
    */
-  public Entry(Registry<T> registry, int index, String name, String unit)
+  public Entry(@NotNull Registry<T> registry, @Range(from = 0, to = MAX_INDEX) int index,
+      @NotNull String name, String unit)
       throws DuplicateException {
     super();
-
-    assert registry != null : "Registry must not be 'null'.";
-    assert index >= 0 : "Index must not be negative.";
 
     this.registry = registry;
     this.index = index;
@@ -50,14 +70,16 @@ public class Entry<T extends IntegerSerializable> {
     }
   }
 
+  @NotNull
   public T getValue() {
     return value;
   }
 
-  public void setValue(T value) {
+  public void setValue(@NotNull T value) {
     this.value = value;
   }
 
+  @NotNull
   public Registry<T> getRegistry() {
     return registry;
   }
@@ -66,6 +88,7 @@ public class Entry<T extends IntegerSerializable> {
     return index;
   }
 
+  @NotNull
   public String getName() {
     return name;
   }
@@ -80,7 +103,7 @@ public class Entry<T extends IntegerSerializable> {
       return false;
     }
 
-    Entry<?> entry = (Entry<?>) obj;
+    var entry = (Entry<?>) obj;
 
     if (!this.registry.equals(entry.registry)) {
       return false;

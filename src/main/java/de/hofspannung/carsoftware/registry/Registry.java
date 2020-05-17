@@ -1,46 +1,40 @@
 package de.hofspannung.carsoftware.registry;
 
-import de.hofspannung.carsoftware.data.IntegerSerializable;
+import de.hofspannung.carsoftware.data.number.Number;
 import de.hofspannung.carsoftware.exception.DuplicateException;
 import java.util.ArrayList;
+import org.jetbrains.annotations.NotNull;
 
 
-public class Registry<T extends IntegerSerializable> {
+public class Registry<T extends Number> {
 
-  private RegistryType type = RegistryType.NONE;
-
+  @NotNull
   private String name;
-  private String typeName;
+  private RegistryType type;
 
   private T defaultValue;
 
-  private ArrayList<Entry<T>> entries;
+  private ArrayList<Entry<T>> entries = new ArrayList<>();
 
   /**
    * Creates a new registry with a default value.
    *
    * @param defaultValue Default value for entries. Cannot be null.
    */
-  public Registry(RegistryType type, T defaultValue) {
-    this(type, null, defaultValue);
+  public Registry(@NotNull T defaultValue) {
+    this(defaultValue.getClass().getSimpleName(), defaultValue);
   }
 
   /**
-   * Creates a new registry with a name and default value for its entrys.
+   * Creates a new registry with a name and default value for its entries.
    *
    * @param name         Name of this registry.
    * @param defaultValue Default value for entries. Cannot be null.
    */
-  public Registry(RegistryType type, String name, T defaultValue) {
-    assert type != RegistryType.NONE : "Type of Registry must not be 'NONE'.";
-    assert defaultValue != null : "Default value of registry must not be 'null'.";
-    assert RegistryType
-        .isObjectOfType(type, defaultValue) : "Type of registry and template type do not match.";
-
-    this.type = type;
+  public Registry(@NotNull String name, @NotNull T defaultValue) {
     this.name = name;
-    this.typeName = defaultValue.getClass().getSimpleName();
     this.defaultValue = defaultValue;
+    this.type = RegistryType.valueOf(defaultValue.getClass().getSimpleName());
   }
 
   /**
@@ -49,7 +43,7 @@ public class Registry<T extends IntegerSerializable> {
    * @param entry Entry to add.
    * @return true if it was added, false otherwise.
    */
-  public boolean addEntry(Entry<T> entry) {
+  public boolean addEntry(@NotNull Entry<T> entry) {
     if (entries.contains(entry)) {
       return false;
     }
@@ -58,12 +52,12 @@ public class Registry<T extends IntegerSerializable> {
     return true;
   }
 
-  public void addNewEntry(int index) throws DuplicateException {
-    new Entry<T>(this, index);
+  public void addNewEntry(int index, @NotNull String name) throws DuplicateException {
+    new Entry<T>(this, index, name);
   }
 
-  public void addNewEntry(int index, String name, String unit) throws DuplicateException {
-    new Entry<T>(this, index, name, unit);
+  public void addNewEntry(int index, @NotNull String name, String unit) throws DuplicateException {
+    new Entry<>(this, index, name, unit);
   }
 
   public boolean containsEntry(Entry<T> entry) {
@@ -84,6 +78,7 @@ public class Registry<T extends IntegerSerializable> {
    *
    * @return name
    */
+  @NotNull
   public String getName() {
     return name;
   }
@@ -94,7 +89,7 @@ public class Registry<T extends IntegerSerializable> {
    * @return Name of the type.
    */
   public String getTypeName() {
-    return typeName;
+    return type.name();
   }
 
   /**
@@ -111,7 +106,11 @@ public class Registry<T extends IntegerSerializable> {
     if (!(obj instanceof Registry)) {
       return false;
     }
-    return true;
+
+    var registry = (Registry<?>) obj;
+
+    return this.defaultValue.equals(registry.defaultValue)
+        && this.type == registry.type;
   }
 
 }

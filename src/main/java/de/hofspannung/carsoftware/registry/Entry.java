@@ -2,24 +2,25 @@ package de.hofspannung.carsoftware.registry;
 
 import de.hofspannung.carsoftware.data.number.Number;
 import de.hofspannung.carsoftware.exception.DuplicateException;
+import javafx.beans.property.SimpleObjectProperty;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
 public class Entry<T extends Number> {
 
-  private static final int MAX_INDEX = Integer.MAX_VALUE;
-
-  @NotNull
-  private Registry<T> registry;
+  private static final int MAX_INDEX = 0b11111111_11111111;
 
   @Range(from = 0, to = MAX_INDEX)
-  private int index;
+  private final int index;
+  @NotNull
+  private final String name;
+  @Nullable
+  private final String unit;
+  @NotNull
+  private Registry<T> registry;
   @NotNull
   private T value;
-
-  @NotNull
-  private String name;
-  private String unit;
 
   /**
    * Creates a new entry and adds it to the registry.
@@ -56,7 +57,7 @@ public class Entry<T extends Number> {
    * @throws DuplicateException If this entry already exists in the registry.
    */
   public Entry(@NotNull Registry<T> registry, @Range(from = 0, to = MAX_INDEX) int index,
-      @NotNull String name, String unit)
+      @NotNull String name, @Nullable String unit)
       throws DuplicateException {
     super();
 
@@ -93,10 +94,17 @@ public class Entry<T extends Number> {
     return name;
   }
 
-  public String getUnit() {
+  public @Nullable String getUnit() {
     return unit;
   }
 
+  /**
+   * Compares the given Object/Entry if it is equal to this one. Does not compare the name, unit or
+   * value of the entry,
+   *
+   * @param obj Object to compare to.
+   * @return true, if equal.
+   */
   @Override
   public boolean equals(Object obj) {
     if (!(obj instanceof Entry<?>)) {

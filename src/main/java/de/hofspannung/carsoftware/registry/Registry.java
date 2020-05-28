@@ -9,12 +9,12 @@ import org.jetbrains.annotations.NotNull;
 public class Registry<T extends Number> {
 
   @NotNull
-  private String name;
-  private RegistryType type;
-
-  private T defaultValue;
-
-  private ArrayList<Entry<T>> entries = new ArrayList<>();
+  private final String name;
+  private final RegistryType type;
+  @NotNull
+  private final T defaultValue;
+  @NotNull
+  private final ArrayList<Entry<T>> entries = new ArrayList<>();
 
   /**
    * Creates a new registry with a default value.
@@ -97,7 +97,7 @@ public class Registry<T extends Number> {
    *
    * @return Default value.
    */
-  public T getDefaultValue() {
+  public @NotNull T getDefaultValue() {
     return defaultValue;
   }
 

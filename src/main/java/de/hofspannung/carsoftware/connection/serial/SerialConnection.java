@@ -63,7 +63,7 @@ public class SerialConnection extends Connection {
   }
 
   /**
-   * Reads all new aviable bytes into the buffer.
+   * Reads all new available bytes into the buffer.
    *
    * @return true if new bytes were added, false otherwise
    */
@@ -98,7 +98,7 @@ public class SerialConnection extends Connection {
       }
 
       // get data from buffer
-      ByteArrayList message = buffer.getRange(0, length);
+      var message = buffer.getRange(0, length);
 
       // if checksum not valid, remove first byte and try again
       if (!Checksum.checkFletcher(message)) {
@@ -107,7 +107,7 @@ public class SerialConnection extends Connection {
       }
 
       // successfully retrieved data!
-      ByteArrayList data = message.getRange(1, dataLength);
+      var data = message.getRange(1, dataLength);
 
       // TODO: do something with data
     }

@@ -5,13 +5,14 @@ import de.hofspannung.carsoftware.exception.ParseException;
 import de.hofspannung.carsoftware.message.Message;
 import de.hofspannung.carsoftware.message.MessageType;
 import de.hofspannung.carsoftware.registry.Entry;
+import jdk.jfr.Unsigned;
 
 public class RegistryMessage extends Message {
 
     /*
-    4       4  		8			16					32
-    0000    0000	00000000	00000000 00000000	00000000 00000000 00000000 00000000
-    Action  Flags	Registry	Entry				Value
+    4      4      8          16                  32
+    0000   0000	  00000000   00000000 00000000   00000000 00000000 00000000 00000000
+    Action Flags  Registry   Entry               Value
 
     Flags:
     1 has registry
@@ -23,10 +24,13 @@ public class RegistryMessage extends Message {
   public static MessageType type = MessageType.REGISTRY;
 
   protected RegistryAction action;
+  @Unsigned
   protected byte registry;
   protected boolean hasRegistry;
+  @Unsigned
   protected short entry;
   protected boolean hasEntry;
+
   protected int value;
   protected boolean hasValue;
 

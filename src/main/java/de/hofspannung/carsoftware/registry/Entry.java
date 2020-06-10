@@ -2,7 +2,6 @@ package de.hofspannung.carsoftware.registry;
 
 import de.hofspannung.carsoftware.data.number.Number;
 import de.hofspannung.carsoftware.exception.DuplicateException;
-import javafx.beans.property.SimpleObjectProperty;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;

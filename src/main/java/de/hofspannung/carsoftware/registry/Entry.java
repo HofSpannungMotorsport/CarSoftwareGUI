@@ -70,7 +70,8 @@ public class Entry<T extends Number> {
 
     this.registry = registry;
     this.index = index;
-    this.setValue(registry.getDefaultValue());
+    this.value = registry.getDefaultValue();
+    this.value.addChangeListener(valueChangeListener);
     this.name = name;
     this.unit = unit;
     if (!this.registry.addEntry(this)) {

@@ -60,6 +60,7 @@ public class Int16 extends Number {
   @Override
   public void add(@NotNull Number number) throws ArithmeticException {
     value += number.longValue();
+    changed();
   }
 
   @Override
@@ -67,11 +68,13 @@ public class Int16 extends Number {
     var val = Math.addExact(value, number.longValue());
     testRange(val);
     value = (short) val;
+    changed();
   }
 
   @Override
   public void subtract(@NotNull Number number) throws ArithmeticException {
     value -= number.longValue();
+    changed();
   }
 
   @Override
@@ -79,6 +82,7 @@ public class Int16 extends Number {
     var val = Math.subtractExact(value, number.longValue());
     testRange(val);
     value = (short) val;
+    changed();
   }
 
   @Override
@@ -88,6 +92,7 @@ public class Int16 extends Number {
     } else {
       value *= number.longValue();
     }
+    changed();
   }
 
   @Override
@@ -101,6 +106,7 @@ public class Int16 extends Number {
       testRange(val);
       value = (short) val;
     }
+    changed();
   }
 
   @Override
@@ -111,6 +117,7 @@ public class Int16 extends Number {
     } else {
       value /= number.longValue();
     }
+    changed();
   }
 
   @Override
@@ -125,6 +132,7 @@ public class Int16 extends Number {
       testRange(val);
       value = (short) val;
     }
+    changed();
   }
 
   @Override

@@ -1,6 +1,8 @@
 package de.hofspannung.carsoftware.data.number;
 
 import de.hofspannung.carsoftware.data.IntegerSerializable;
+import java.util.LinkedList;
+import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -8,6 +10,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class Number extends java.lang.Number implements IntegerSerializable,
     Comparable<Number>, Cloneable {
+
+  private List<NumberChangeListener<Number>> changeListeners = new LinkedList<>();
 
   /**
    * The minimum value this number can hold (nearest to negative infinity).
@@ -203,4 +207,18 @@ public abstract class Number extends java.lang.Number implements IntegerSerializ
    */
   @Override
   public abstract String toString();
+
+  public void addChangeListener(NumberChangeListener<Number> listener) {
+    changeListeners.add(listener);
+  }
+
+  public void removeChangeListener(NumberChangeListener<Number> listener) {
+    changeListeners.remove(listener);
+  }
+
+  protected void changed() {
+    changeListeners.forEach(l -> {
+      l.changed(this);
+    });
+  }
 }

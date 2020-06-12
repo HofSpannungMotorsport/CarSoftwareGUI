@@ -55,6 +55,7 @@ public class Float extends Number {
   @Override
   public void add(@NotNull Number number) throws ArithmeticException {
     value += number.doubleValue();
+    changed();
   }
 
   @Override
@@ -62,11 +63,13 @@ public class Float extends Number {
     var val = value + number.doubleValue();
     testRange(val);
     value = (float) val;
+    changed();
   }
 
   @Override
   public void subtract(@NotNull Number number) throws ArithmeticException {
     value -= number.doubleValue();
+    changed();
   }
 
   @Override
@@ -74,11 +77,13 @@ public class Float extends Number {
     var val = value - number.doubleValue();
     testRange(val);
     value = (float) val;
+    changed();
   }
 
   @Override
   public void multiply(@NotNull Number number) throws ArithmeticException {
     value *= number.doubleValue();
+    changed();
   }
 
   @Override
@@ -86,12 +91,14 @@ public class Float extends Number {
     var val = value * number.doubleValue();
     testRange(val);
     value = (float) val;
+    changed();
   }
 
   @Override
   public void divide(@NotNull Number number) throws ArithmeticException {
     number.testZeroDivision();
     value /= number.doubleValue();
+    changed();
   }
 
   @Override
@@ -100,6 +107,7 @@ public class Float extends Number {
     var val = value / number.doubleValue();
     testRange(val);
     value = (float) val;
+    changed();
   }
 
   @Override

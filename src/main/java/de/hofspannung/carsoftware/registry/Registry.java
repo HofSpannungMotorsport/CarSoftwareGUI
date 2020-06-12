@@ -3,6 +3,8 @@ package de.hofspannung.carsoftware.registry;
 import de.hofspannung.carsoftware.data.number.Number;
 import de.hofspannung.carsoftware.exception.DuplicateException;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -15,6 +17,9 @@ public class Registry<T extends Number> {
   private final T defaultValue;
   @NotNull
   private final ArrayList<Entry<T>> entries = new ArrayList<>();
+
+  private List<EntryValueChangedListener<T>> entryValueChangedListeners = new LinkedList<>();
+  private EntryValueChangedListener<T> entryValueChangedListener = this::entryChanged;
 
   /**
    * Creates a new registry with a default value.
@@ -49,15 +54,18 @@ public class Registry<T extends Number> {
     }
 
     entries.add(entry);
+    entry.addValueChangedListener(entryValueChangedListener);
     return true;
   }
 
   public void addNewEntry(int index, @NotNull String name) throws DuplicateException {
-    new Entry<T>(this, index, name);
+    var entry = new Entry<T>(this, index, name);
+    entry.addValueChangedListener(entryValueChangedListener);
   }
 
   public void addNewEntry(int index, @NotNull String name, String unit) throws DuplicateException {
-    new Entry<>(this, index, name, unit);
+    var entry = new Entry<>(this, index, name, unit);
+    entry.addValueChangedListener(entryValueChangedListener);
   }
 
   public boolean containsEntry(Entry<T> entry) {
@@ -111,6 +119,20 @@ public class Registry<T extends Number> {
 
     return this.defaultValue.equals(registry.defaultValue)
         && this.type == registry.type;
+  }
+
+  public void addEntryValueChangedListener(EntryValueChangedListener<T> listener) {
+    entryValueChangedListeners.add(listener);
+  }
+
+  public void removeEntryValueChangedListener(EntryValueChangedListener<T> listener) {
+    entryValueChangedListeners.remove(listener);
+  }
+
+  private void entryChanged(Entry<T> entry, T value) {
+    entryValueChangedListeners.forEach(l -> {
+      l.changed(entry, value);
+    });
   }
 
 }

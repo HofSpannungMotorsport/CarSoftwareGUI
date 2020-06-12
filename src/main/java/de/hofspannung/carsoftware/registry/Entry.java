@@ -1,7 +1,10 @@
 package de.hofspannung.carsoftware.registry;
 
 import de.hofspannung.carsoftware.data.number.Number;
+import de.hofspannung.carsoftware.data.number.NumberChangeListener;
 import de.hofspannung.carsoftware.exception.DuplicateException;
+import java.util.LinkedList;
+import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
@@ -20,6 +23,11 @@ public class Entry<T extends Number> {
   private Registry<T> registry;
   @NotNull
   private T value;
+
+  private List<EntryValueChangedListener<T>> valueChangeListeners = new LinkedList<>();
+  private NumberChangeListener<Number> valueChangeListener = l -> {
+    valueChanged();
+  };
 
   /**
    * Creates a new entry and adds it to the registry.
@@ -62,7 +70,7 @@ public class Entry<T extends Number> {
 
     this.registry = registry;
     this.index = index;
-    this.value = registry.getDefaultValue();
+    this.setValue(registry.getDefaultValue());
     this.name = name;
     this.unit = unit;
     if (!this.registry.addEntry(this)) {
@@ -76,7 +84,9 @@ public class Entry<T extends Number> {
   }
 
   public void setValue(@NotNull T value) {
+    this.value.removeChangeListener(valueChangeListener);
     this.value = value;
+    this.value.addChangeListener(valueChangeListener);
   }
 
   @NotNull
@@ -125,6 +135,20 @@ public class Entry<T extends Number> {
     }
 
     return true;
+  }
+
+  public void addValueChangedListener(EntryValueChangedListener<T> listener) {
+    valueChangeListeners.add(listener);
+  }
+
+  public void removeValueChangedListener(EntryValueChangedListener<T> listener) {
+    valueChangeListeners.remove(listener);
+  }
+
+  private void valueChanged() {
+    valueChangeListeners.forEach(l -> {
+      l.changed(this, value);
+    });
   }
 
 }

@@ -134,6 +134,21 @@ public class Int32 extends Number {
   }
 
   @Override
+  public void cast(double value) {
+    this.value = (int) value;
+  }
+
+  @Override
+  public void cast(long value) {
+    this.value = (int) value;
+  }
+
+  @Override
+  public void parseExact(String value) throws NumberFormatException {
+    this.value = Integer.parseInt(value);
+  }
+
+  @Override
   public Int32 clone() {
     return new Int32(value);
   }

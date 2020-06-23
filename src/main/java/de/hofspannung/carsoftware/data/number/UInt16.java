@@ -131,6 +131,25 @@ public class UInt16 extends Number {
   }
 
   @Override
+  public void cast(double value) {
+    this.value = (short) value;
+  }
+
+  @Override
+  public void cast(long value) {
+    this.value = (short) value;
+  }
+
+  @Override
+  public void parseExact(String value) throws NumberFormatException {
+    var val = Long.parseLong(value);
+    if (!inRange(val)) {
+      throw new NumberFormatException("Not in range: " + val);
+    }
+    cast(val);
+  }
+
+  @Override
   public UInt16 clone() {
     return new UInt16(value);
   }

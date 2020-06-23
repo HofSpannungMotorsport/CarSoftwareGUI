@@ -142,6 +142,21 @@ public class Int8 extends Number {
   }
 
   @Override
+  public void cast(double value) {
+    this.value = (byte) value;
+  }
+
+  @Override
+  public void cast(long value) {
+    this.value = (byte) value;
+  }
+
+  @Override
+  public void parseExact(String value) throws NumberFormatException {
+    this.value = Byte.parseByte(value);
+  }
+
+  @Override
   public Int8 clone() {
     return new Int8(value);
   }

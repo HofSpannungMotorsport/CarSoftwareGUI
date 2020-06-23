@@ -131,6 +131,25 @@ public class UInt8 extends Number {
   }
 
   @Override
+  public void cast(double value) {
+    this.value = (byte) value;
+  }
+
+  @Override
+  public void cast(long value) {
+    this.value = (byte) value;
+  }
+
+  @Override
+  public void parseExact(String value) throws NumberFormatException {
+    var val = Long.parseLong(value);
+    if (!inRange(val)) {
+      throw new NumberFormatException("Not in range: " + val);
+    }
+    cast(val);
+  }
+
+  @Override
   public UInt8 clone() {
     return new UInt8(value);
   }

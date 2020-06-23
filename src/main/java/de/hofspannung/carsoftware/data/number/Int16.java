@@ -136,6 +136,21 @@ public class Int16 extends Number {
   }
 
   @Override
+  public void cast(double value) {
+    this.value = (short) value;
+  }
+
+  @Override
+  public void cast(long value) {
+    this.value = (short) value;
+  }
+
+  @Override
+  public void parseExact(String value) throws NumberFormatException {
+    this.value = Short.parseShort(value);
+  }
+
+  @Override
   public Int16 clone() {
     return new Int16(value);
   }

@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 public abstract class Number extends java.lang.Number implements IntegerSerializable,
     Comparable<Number>, Cloneable {
 
-  private List<NumberChangeListener<Number>> changeListeners = new LinkedList<>();
+  private final List<NumberChangeListener<Number>> changeListeners = new LinkedList<>();
 
   /**
    * The minimum value this number can hold (nearest to negative infinity).
@@ -175,6 +175,40 @@ public abstract class Number extends java.lang.Number implements IntegerSerializ
   }
 
   /**
+   * Sets this value by casting the given one. Overflow is ignored (e.g. 257 casts to 1 as UInt8).
+   *
+   * @param value value to cast.
+   */
+  public abstract void cast(double value);
+
+  /**
+   * Sets this value by casting the given one. Overflow is ignored (e.g. 257 casts to 1 as UInt8).
+   *
+   * @param value value to cast.
+   */
+  public abstract void cast(long value);
+
+  /**
+   * Parses the given string in this number. Overflow is ignored (e.g. 257 casts to 1 as UInt8).
+   *
+   * @param value to parse
+   * @throws NumberFormatException if parsing was not possible.
+   */
+  public void parse(String value) throws NumberFormatException {
+    cast(Double.parseDouble(value));
+  }
+
+  /**
+   * Parses the given string in this number.
+   *
+   * @param value to parse
+   * @throws NumberFormatException if parsing was not possible or the given value does not fit in
+   *                               range.
+   */
+  public abstract void parseExact(String value) throws NumberFormatException;
+
+
+  /**
    * Compares this number to another.
    *
    * @param number Number to compare to.
@@ -217,8 +251,6 @@ public abstract class Number extends java.lang.Number implements IntegerSerializ
   }
 
   protected void changed() {
-    changeListeners.forEach(l -> {
-      l.changed(this);
-    });
+    changeListeners.forEach(l -> l.changed(this));
   }
 }

@@ -111,6 +111,21 @@ public class Float extends Number {
   }
 
   @Override
+  public void cast(double value) {
+    this.value = (float) value;
+  }
+
+  @Override
+  public void cast(long value) {
+    this.value = value;
+  }
+
+  @Override
+  public void parseExact(String value) throws NumberFormatException {
+    this.value = java.lang.Float.parseFloat(value);
+  }
+
+  @Override
   public Float clone() {
     return new Float(value);
   }

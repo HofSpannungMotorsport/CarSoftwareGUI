@@ -133,11 +133,13 @@ public class UInt8 extends Number {
   @Override
   public void cast(double value) {
     this.value = (byte) value;
+    changed();
   }
 
   @Override
   public void cast(long value) {
     this.value = (byte) value;
+    changed();
   }
 
   @Override

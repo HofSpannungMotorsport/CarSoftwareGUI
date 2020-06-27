@@ -136,16 +136,19 @@ public class Int32 extends Number {
   @Override
   public void cast(double value) {
     this.value = (int) value;
+    changed();
   }
 
   @Override
   public void cast(long value) {
     this.value = (int) value;
+    changed();
   }
 
   @Override
   public void parseExact(String value) throws NumberFormatException {
     this.value = Integer.parseInt(value);
+    changed();
   }
 
   @Override

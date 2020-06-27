@@ -144,16 +144,19 @@ public class Int8 extends Number {
   @Override
   public void cast(double value) {
     this.value = (byte) value;
+    changed();
   }
 
   @Override
   public void cast(long value) {
     this.value = (byte) value;
+    changed();
   }
 
   @Override
   public void parseExact(String value) throws NumberFormatException {
     this.value = Byte.parseByte(value);
+    changed();
   }
 
   @Override

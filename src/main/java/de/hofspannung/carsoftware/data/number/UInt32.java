@@ -134,11 +134,13 @@ public class UInt32 extends Number {
   @Override
   public void cast(double value) {
     this.value = (int) value;
+    changed();
   }
 
   @Override
   public void cast(long value) {
     this.value = (int) value;
+    changed();
   }
 
   @Override

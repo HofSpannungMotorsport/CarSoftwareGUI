@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<fx:root spacing="5.0" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+  <HBox alignment="CENTER" spacing="10.0">
+    <Label fx:id="name" prefWidth="100.0" text="name">
+      <font>
+        <Font name="System Bold" size="12.0" />
+      </font>
+    </Label>
+    <Spinner fx:id="spinner" editable="true" prefWidth="125.0" styleClass="split-arrows-horizontal" />
+    <Label fx:id="unit" text="unit" />
+  </HBox>
+  <HBox alignment="CENTER" spacing="10.0">
+    <Label fx:id="min" text="min" />
+    <Slider fx:id="slider" prefWidth="200.0" />
+    <Label fx:id="max" text="max" />
+  </HBox>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+</fx:root>

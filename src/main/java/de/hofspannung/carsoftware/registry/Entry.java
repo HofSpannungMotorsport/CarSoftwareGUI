@@ -19,15 +19,16 @@ public class Entry<T extends Number> {
   private final String name;
   @Nullable
   private final String unit;
+  private final List<EntryValueChangedListener<T>> valueChangeListeners = new LinkedList<>();
   @NotNull
   private Registry<T> registry;
   @NotNull
   private T value;
-
-  private List<EntryValueChangedListener<T>> valueChangeListeners = new LinkedList<>();
-  private NumberChangeListener<Number> valueChangeListener = l -> {
-    valueChanged();
-  };
+  private final NumberChangeListener<Number> valueChangeListener = l -> valueChanged();
+  @NotNull
+  private T min;
+  @NotNull
+  private T max;
 
   /**
    * Creates a new entry and adds it to the registry.
@@ -46,6 +47,7 @@ public class Entry<T extends Number> {
    *
    * @param registry Registry this belongs to.
    * @param index    Index of this entry.
+   * @param name     Name of this.
    * @throws DuplicateException If this entry already exists in the registry.
    */
   public Entry(@NotNull Registry<T> registry, @Range(from = 0, to = MAX_INDEX) int index,
@@ -74,6 +76,8 @@ public class Entry<T extends Number> {
     this.value.addChangeListener(valueChangeListener);
     this.name = name;
     this.unit = unit;
+    this.min = (T) value.minValue();
+    this.max = (T) value.maxValue();
     if (!this.registry.addEntry(this)) {
       throw new DuplicateException("This entry already exists in the registry!");
     }
@@ -88,6 +92,14 @@ public class Entry<T extends Number> {
     this.value.removeChangeListener(valueChangeListener);
     this.value = value;
     this.value.addChangeListener(valueChangeListener);
+  }
+
+  public @NotNull T getMin() {
+    return min;
+  }
+
+  public @NotNull T getMax() {
+    return max;
   }
 
   @NotNull
@@ -147,9 +159,7 @@ public class Entry<T extends Number> {
   }
 
   private void valueChanged() {
-    valueChangeListeners.forEach(l -> {
-      l.changed(this, value);
-    });
+    valueChangeListeners.forEach(l -> l.changed(this, value));
   }
 
 }

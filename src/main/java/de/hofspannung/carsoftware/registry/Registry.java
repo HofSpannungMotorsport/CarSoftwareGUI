@@ -3,6 +3,7 @@ package de.hofspannung.carsoftware.registry;
 import de.hofspannung.carsoftware.data.number.Number;
 import de.hofspannung.carsoftware.exception.DuplicateException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
@@ -58,14 +59,26 @@ public class Registry<T extends Number> {
     return true;
   }
 
-  public void addNewEntry(int index, @NotNull String name) throws DuplicateException {
+  public Entry<T> addNewEntry(int index, @NotNull String name) throws DuplicateException {
     var entry = new Entry<T>(this, index, name);
     entry.addValueChangedListener(entryValueChangedListener);
+    return entry;
   }
 
-  public void addNewEntry(int index, @NotNull String name, String unit) throws DuplicateException {
-    var entry = new Entry<>(this, index, name, unit);
+  public Entry<T> addNewEntry(int index, @NotNull String name, String unit)
+      throws DuplicateException {
+    var entry = new Entry<T>(this, index, name, unit);
     entry.addValueChangedListener(entryValueChangedListener);
+    return entry;
+  }
+
+  /**
+   * Returns a list of all entries.
+   *
+   * @return Readonly list with this registries entries.
+   */
+  public List<Entry<T>> getEntries() {
+    return Collections.unmodifiableList(entries);
   }
 
   public boolean containsEntry(Entry<T> entry) {
@@ -98,6 +111,15 @@ public class Registry<T extends Number> {
    */
   public String getTypeName() {
     return type.name();
+  }
+
+  /**
+   * Type of the registry class.
+   *
+   * @return Number class of the type.
+   */
+  public Class<T> getTypeClass() {
+    return (Class<T>) defaultValue.getClass();
   }
 
   /**

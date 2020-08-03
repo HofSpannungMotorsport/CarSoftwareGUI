@@ -72,7 +72,7 @@ public class Entry<T extends Number> {
 
     this.registry = registry;
     this.index = index;
-    this.value = registry.getDefaultValue();
+    this.value = (T) registry.getDefaultValue().clone();
     this.value.addChangeListener(valueChangeListener);
     this.name = name;
     this.unit = unit;
@@ -92,6 +92,7 @@ public class Entry<T extends Number> {
     this.value.removeChangeListener(valueChangeListener);
     this.value = value;
     this.value.addChangeListener(valueChangeListener);
+    valueChanged();
   }
 
   public @NotNull T getMin() {
@@ -118,6 +119,16 @@ public class Entry<T extends Number> {
 
   public @Nullable String getUnit() {
     return unit;
+  }
+
+  /**
+   * Checks if the given number is in range of this entries min and max values.
+   *
+   * @param n Number to check.
+   * @return true if in range, false otherwise.
+   */
+  public boolean inRange(Number n) {
+    return n.compareTo(min) >= 0 && n.compareTo(max) <= 0;
   }
 
   /**

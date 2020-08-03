@@ -67,11 +67,20 @@ public class RegistryBuilder {
       var name = obj.getString("name");
       var unit = obj.getString("unit");
 
+      Entry<?> entry = null;
       try {
-        registry.addNewEntry(index, name, unit);
+        entry = registry.addNewEntry(index, name, unit);
       } catch (DuplicateException e) {
         e.printStackTrace();
+        return;
       }
+
+      if (obj.has("value"))
+        entry.getValue().cast(obj.getDouble("value"));
+      if (obj.has("min"))
+        entry.getMin().cast(obj.getDouble("min"));
+      if (obj.has("max"))
+        entry.getMax().cast(obj.getDouble("max"));
     });
   }
 

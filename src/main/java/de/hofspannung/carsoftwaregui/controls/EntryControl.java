@@ -25,12 +25,22 @@ public class EntryControl extends VBox {
 
     @Override
     public void decrement(int i) {
-      entry.getValue().subtract(makeStep(i));
+      var result = entry.getValue().clone();
+      var step = makeStep(i);
+      result.subtract(step);
+      if (entry.inRange(result)) {
+        entry.getValue().subtract(step);
+      }
     }
 
     @Override
     public void increment(int i) {
-      entry.getValue().add(makeStep(i));
+      var result = entry.getValue().clone();
+      var step = makeStep(i);
+      result.add(step);
+      if (entry.inRange(result)) {
+        entry.getValue().add(step);
+      }
     }
 
     private Number makeStep(int i) {
@@ -79,7 +89,11 @@ public class EntryControl extends VBox {
       @Override
       public Number fromString(String s) {
         var val = entry.getValue();
-        val.parse(s);
+        var test = val.clone();
+        test.parse(s);
+        if (entry.inRange(test)) {
+          val.parse(s);
+        }
         return val.clone();
       }
     });

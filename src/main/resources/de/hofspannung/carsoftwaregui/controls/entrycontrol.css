@@ -1,0 +1,20 @@
+
+Spinner:disabled {
+  -fx-opacity: 1;
+}
+
+Spinner:disabled .text-field {
+  -fx-opacity: 1;
+}
+
+Spinner:disabled .decrement-arrow-button, Spinner:disabled .increment-arrow-button {
+  -fx-opacity: .5;
+}
+
+Slider:disabled {
+  -fx-opacity: 1;
+}
+
+Slider:disabled .thumb {
+  -fx-opacity: .5;
+}

@@ -20,6 +20,7 @@ public class Entry<T extends Number> {
   @Nullable
   private final String unit;
   private final List<EntryValueChangedListener<T>> valueChangeListeners = new LinkedList<>();
+  private final boolean editable;
   @NotNull
   private Registry<T> registry;
   @NotNull
@@ -35,11 +36,13 @@ public class Entry<T extends Number> {
    *
    * @param registry Registry this belongs to.
    * @param index    Index of this entry.
+   * @param editable If this value can be edited.
    * @throws DuplicateException If this entry already exists in the registry.
    */
-  public Entry(@NotNull Registry<T> registry, @Range(from = 0, to = MAX_INDEX) int index)
+  public Entry(@NotNull Registry<T> registry, @Range(from = 0, to = MAX_INDEX) int index,
+      boolean editable)
       throws DuplicateException {
-    this(registry, index, String.format("%s-%03d", registry.getTypeName(), index));
+    this(registry, index, editable, String.format("%s-%03d", registry.getTypeName(), index));
   }
 
   /**
@@ -47,13 +50,14 @@ public class Entry<T extends Number> {
    *
    * @param registry Registry this belongs to.
    * @param index    Index of this entry.
+   * @param editable If this value can be edited.
    * @param name     Name of this.
    * @throws DuplicateException If this entry already exists in the registry.
    */
   public Entry(@NotNull Registry<T> registry, @Range(from = 0, to = MAX_INDEX) int index,
-      @NotNull String name)
+      boolean editable, @NotNull String name)
       throws DuplicateException {
-    this(registry, index, name, null);
+    this(registry, index, editable, name, null);
   }
 
   /**
@@ -61,12 +65,13 @@ public class Entry<T extends Number> {
    *
    * @param registry Registry this belongs to.
    * @param index    Index of this entry.
+   * @param editable If this value can be edited.
    * @param name     Name of this.
    * @param unit     Unit of measurement of this.
    * @throws DuplicateException If this entry already exists in the registry.
    */
   public Entry(@NotNull Registry<T> registry, @Range(from = 0, to = MAX_INDEX) int index,
-      @NotNull String name, @Nullable String unit)
+      boolean editable, @NotNull String name, @Nullable String unit)
       throws DuplicateException {
     super();
 
@@ -78,6 +83,7 @@ public class Entry<T extends Number> {
     this.unit = unit;
     this.min = (T) value.minValue();
     this.max = (T) value.maxValue();
+    this.editable = editable;
     if (!this.registry.addEntry(this)) {
       throw new DuplicateException("This entry already exists in the registry!");
     }
@@ -129,6 +135,10 @@ public class Entry<T extends Number> {
    */
   public boolean inRange(Number n) {
     return n.compareTo(min) >= 0 && n.compareTo(max) <= 0;
+  }
+
+  public boolean isEditable() {
+    return editable;
   }
 
   /**

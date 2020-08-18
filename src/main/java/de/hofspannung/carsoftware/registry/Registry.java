@@ -59,15 +59,16 @@ public class Registry<T extends Number> {
     return true;
   }
 
-  public Entry<T> addNewEntry(int index, @NotNull String name) throws DuplicateException {
-    var entry = new Entry<T>(this, index, name);
+  public Entry<T> addNewEntry(int index, boolean editable, @NotNull String name)
+      throws DuplicateException {
+    var entry = new Entry<T>(this, index, editable, name);
     entry.addValueChangedListener(entryValueChangedListener);
     return entry;
   }
 
-  public Entry<T> addNewEntry(int index, @NotNull String name, String unit)
+  public Entry<T> addNewEntry(int index, boolean editable, @NotNull String name, String unit)
       throws DuplicateException {
-    var entry = new Entry<T>(this, index, name, unit);
+    var entry = new Entry<T>(this, index, editable, name, unit);
     entry.addValueChangedListener(entryValueChangedListener);
     return entry;
   }

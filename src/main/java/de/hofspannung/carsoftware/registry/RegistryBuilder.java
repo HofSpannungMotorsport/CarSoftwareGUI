@@ -67,20 +67,25 @@ public class RegistryBuilder {
       var name = obj.getString("name");
       var unit = obj.getString("unit");
 
+      var editable = obj.has("editable") && obj.getBoolean("editable");
+
       Entry<?> entry = null;
       try {
-        entry = registry.addNewEntry(index, name, unit);
+        entry = registry.addNewEntry(index, editable, name, unit);
       } catch (DuplicateException e) {
         e.printStackTrace();
         return;
       }
 
-      if (obj.has("value"))
+      if (obj.has("value")) {
         entry.getValue().cast(obj.getDouble("value"));
-      if (obj.has("min"))
+      }
+      if (obj.has("min")) {
         entry.getMin().cast(obj.getDouble("min"));
-      if (obj.has("max"))
+      }
+      if (obj.has("max")) {
         entry.getMax().cast(obj.getDouble("max"));
+      }
     });
   }
 

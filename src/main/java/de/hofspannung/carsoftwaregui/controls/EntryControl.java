@@ -112,8 +112,10 @@ public class EntryControl extends VBox {
     slider.setMax(entry.getMax().doubleValue());
 
     slider.setValue(entry.getValue().doubleValue());
-
     factory.setValue(entry.getValue().clone());
+
+    spinner.setDisable(!entry.isEditable());
+    slider.setDisable(!entry.isEditable());
 
     entry.addValueChangedListener(this::valueChanged);
   }

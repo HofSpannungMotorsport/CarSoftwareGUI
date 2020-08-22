@@ -1,0 +1,18 @@
+{
+  "type": "Int8",
+  "name": "Test",
+  "default": 0,
+  "entries": {
+    "0": {
+      "name": "Geschwindigkeit",
+      "unit": "km/h"
+    },
+    "1": {
+      "name": "Beschleunigung",
+      "unit": "G",
+      "min": 0,
+      "max": 5,
+      "value": 1
+    }
+  }
+}

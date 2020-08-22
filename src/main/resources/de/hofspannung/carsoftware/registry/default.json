@@ -1,0 +1,21 @@
+{
+  "type": "Float",
+  "name": "Komma",
+  "default": 0,
+  "entries": {
+    "0": {
+      "name": "Gas",
+      "unit": "%",
+      "min": 0,
+      "max": 1
+    },
+    "1": {
+      "name": "Bremse",
+      "unit": "%",
+      "min": 0,
+      "max": 5,
+      "value": 2,
+      "editable": true
+    }
+  }
+}

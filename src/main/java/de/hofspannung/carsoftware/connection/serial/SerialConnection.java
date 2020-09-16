@@ -2,6 +2,8 @@ package de.hofspannung.carsoftware.connection.serial;
 
 import com.fazecast.jSerialComm.SerialPort;
 import de.hofspannung.carsoftware.connection.Connection;
+import de.hofspannung.carsoftware.connection.DataBuffer;
+import de.hofspannung.carsoftware.connection.DataBuffer.DataReceiver;
 import de.hofspannung.carsoftware.data.ByteArrayList;
 import de.hofspannung.carsoftware.data.Checksum;
 import de.hofspannung.carsoftware.exception.PortException;
@@ -29,6 +31,8 @@ public class SerialConnection extends Connection {
   private SerialPort port;
 
   private Timer timer;
+
+  private DataBuffer receiver = new DataBuffer(); // external buffer
 
   public SerialConnection(SerialPort port) throws PortException {
     super();
@@ -109,7 +113,7 @@ public class SerialConnection extends Connection {
       // successfully retrieved data!
       var data = message.getRange(1, dataLength);
 
-      // TODO: do something with data
+      receiver.addData(data);
     }
   }
 
@@ -136,6 +140,11 @@ public class SerialConnection extends Connection {
     Checksum.addFletcher(dataAl);
 
     write(dataAl);
+  }
+
+  @Override
+  public DataReceiver getReceiver() {
+    return receiver.getReciever();
   }
 
   private void write(ByteArrayList data) {

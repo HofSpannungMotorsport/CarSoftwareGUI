@@ -26,7 +26,7 @@
       <artifactId>junit</artifactId>
       <groupId>junit</groupId>
       <scope>test</scope>
-      <version>RELEASE</version>
+      <version>4.13.1</version>
     </dependency>
     <dependency>
       <artifactId>javafx-controls</artifactId>
